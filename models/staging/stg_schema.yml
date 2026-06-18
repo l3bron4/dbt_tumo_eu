@@ -17,7 +17,8 @@ models:
         description: "The evaluation status of the self-training attempt."
         tests:
           - accepted_values:
-              values: ['Awarded', 'Working', 'Rejected']
+              arguments :
+                values: ['Awarded', 'Working', 'Rejected']
 
   - name: stg_tumo_raw_data__AF_jira_tickets
     description: "Staging table containing IT support and software bug tickets submitted from European centers. Granularity: one row per support ticket."
@@ -31,7 +32,8 @@ models:
         description: "The urgency level assigned to the ticket."
         tests:
           - accepted_values:
-              values: ['Low', 'Medium', 'High']
+              arguments :
+                values: ['Low', 'Medium', 'High']
 
   - name: stg_tumo_raw_data__AF_list
     description: "Staging reference table of available self-training activities and their baseline technical benchmarks."
@@ -46,13 +48,14 @@ models:
         tests:
           - not_null
 
-- name: stg_tumo_raw_data__Center_activity_daily_status
+  - name: stg_tumo_raw_data__Center_activity_daily_status
     description: "Staging table aggregating operational metrics per training center on a daily basis. Granularity: one row per date and status."
     tests:
-      - dbt_utils.unique_combination_of:
-          combinations:
-            - date
-            - status
+      - dbt_utils.unique_combination_of_columns:
+          arguments : 
+            combination_of_columns:
+              - date
+              - status
     columns:
       - name: date
         description: "The operational log date."
@@ -72,14 +75,15 @@ models:
           - unique
           - not_null
 
-- name: stg_tumo_raw_data__LAB_satisfaction_enriched
+  - name: stg_tumo_raw_data__LAB_satisfaction_enriched
     description: "Enriched staging table of end-of-lab satisfaction surveys. Granularity: one row per timestamp, workshop level, and workshop topic."
     tests:
-      - dbt_utils.unique_combination_of:
-          combinations:
-            - timestamp_comment
-            - workshop_lvl
-            - workshop
+      - dbt_utils.unique_combination_of_columns:
+          arguments :
+            combination_of_columns:
+              - timestamp_comment
+              - workshop_lvl
+              - workshop
     columns:
       - name: timestamp_comment
         description: "The BigQuery native format timestamp when the survey was submitted."
@@ -90,7 +94,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [1, 2, 3, 4, 5]
+              arguments :
+                values: [1, 2, 3, 4, 5]
 
   - name: stg_tumo_raw_data__Student_list_info_performance
     description: "Staging master registry containing student profiles, registration dates, and baseline performance scores."
