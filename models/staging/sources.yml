@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: tumo_raw_data
+    description: "Raw data ingested from TUMO learning tracking platforms, product analytics tools, IT support, and student satisfaction surveys."
+    schema : tumo_raw_data
+    tables:
+      - name: AF_amplitude_tracking
+        description: "Raw clickstream event data (Activity_Started, Activity_Submitted) extracted from Amplitude via Airbyte for self-training session tracking."
+
+      - name: AF_events
+        description: "Comprehensive chronological history of all student exercise attempts, submissions, and examiner corrections within self-training."
+
+      - name: AF_jira_tickets
+        description: "IT support ticket exports logging platform bugs, software blocks, and hardware issues reported across European training centers."
+
+      - name: AF_list
+        description: "Reference table of available self-training activities, including domains, difficulty levels."
+
+      - name: Center_activity_daily_status
+        description: "Daily aggregated operational status and high-level training metrics summarized per physical center."
+
+      - name: LAB_events
+        description: "Event logs tracking attendance, participation, and completion milestones during guided workshop sessions (Labs)."
+
+      - name: LAB_satisfaction_enriched
+        description: "Consolidated end-of-lab satisfaction surveys, include satisfaction rate, tag_like, tag_dislike and cleaned feedback text."
+
+      - name: Student_list_info_performance
+        description: "Student master registry containing profiles, enrollment dates (Attending_Since), and global learning performance indicators."
