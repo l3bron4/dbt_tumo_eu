@@ -11,8 +11,8 @@ renamed as (
     select
         ticket_id,
         created_date,
-        center_city,
-        skillactivity,
+        center_city as location,
+        skillactivity as activity_name,
         software_version,
         issue_type,
         priority,

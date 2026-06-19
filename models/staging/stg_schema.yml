@@ -28,6 +28,8 @@ models:
         tests:
           - unique
           - not_null
+      - name: activity_name_en_fr
+        description: "The foreign key to join with AF tables"
       - name: priority
         description: "The urgency level assigned to the ticket."
         tests:
@@ -38,7 +40,7 @@ models:
   - name: stg_tumo_raw_us__AF_list
     description: "Staging reference table of available self-training activities and their baseline technical benchmarks."
     columns:
-      - name: activity
+      - name: activity_name
         description: "The primary key for this reference table."
         tests:
           - unique
@@ -81,7 +83,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: timestamp_comment
+      - name: comment_timestamp
         description: "The BigQuery native format timestamp when the survey was submitted."
         tests:
           - not_null

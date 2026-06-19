@@ -13,10 +13,10 @@ WITH ref_lab AS (
 , user_lab_count_date AS (
     SELECT
       user_id,
-      ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY start_date) AS num_lab_count,
+      ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY lab_start_date) AS num_lab_count,
       workshop,
-      start_date AS lab_start_date,
-      end_date AS lab_end_date
+      lab_start_date,
+      lab_end_date
     FROM ref_lab
   )
 
@@ -27,13 +27,13 @@ WITH ref_lab AS (
       MIN(b.first_day_date) AS first_day_date,
       MIN(b.path_date) AS path_date,
       MIN(IF(num_lab_count = 1, lab_start_date, NULL)) AS lab_1_start_date,
-      MIN(IF(num_lab_count = 1, lab_start_date, NULL)) AS lab_1_end_date,
+      MIN(IF(num_lab_count = 1, lab_end_date, NULL)) AS lab_1_end_date,
       MIN(IF(num_lab_count = 2, lab_start_date, NULL)) AS lab_2_start_date,
-      MIN(IF(num_lab_count = 2, lab_start_date, NULL)) AS lab_2_end_date,
+      MIN(IF(num_lab_count = 2, lab_end_date, NULL)) AS lab_2_end_date,
       MIN(IF(num_lab_count = 3, lab_start_date, NULL)) AS lab_3_start_date,
-      MIN(IF(num_lab_count = 3, lab_start_date, NULL)) AS lab_3_end_date,
+      MIN(IF(num_lab_count = 3, lab_end_date, NULL)) AS lab_3_end_date,
       MIN(IF(num_lab_count = 4, lab_start_date, NULL)) AS lab_4_start_date,
-      MIN(IF(num_lab_count = 4, lab_start_date, NULL)) AS lab_4_end_date,
+      MIN(IF(num_lab_count = 4, lab_end_date, NULL)) AS lab_4_end_date,
       MIN(b.churn_date) AS churn_date
     FROM {{ ref('stg_tumo_raw_us__Student_list_info_performance') }} b
     LEFT JOIN user_lab_count_date l

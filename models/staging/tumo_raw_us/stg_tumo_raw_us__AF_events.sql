@@ -11,8 +11,8 @@ renamed as (
     select
         act_id,
         username as user_id,
-        skill,
-        activity,
+        skill as workshop,
+        activity as activity_name_en_fr,
         reject_count,
         try_status,
         last_submission_date,

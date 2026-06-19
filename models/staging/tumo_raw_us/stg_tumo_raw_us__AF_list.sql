@@ -10,10 +10,10 @@ renamed as (
 
     select
         skill,
-        placement,
+        placement as workshop_lvl,
         position,
         bonus,
-        activity,
+        activity as activity_name,
         activity_name_en_fr
 
     from source

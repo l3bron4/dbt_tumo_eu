@@ -10,8 +10,13 @@ renamed as (
 
     select
         concat('SATIS-', row_number() over()) as satisfaction_id, -- primary_key added
-        timestamp_comment,
-        workshop_lvl,
+        timestamp_comment as comment_timestamp,
+        case
+            when workshop_lvl = 'Lab niveau 1' then 'Level I'
+            when workshop_lvl = 'Lab niveau 2' then 'Level II'
+            when workshop_lvl = 'Lab niveau 3' then 'Level III'
+            end
+            as workshop_lvl,
         workshop,
         satisfaction_on_5,
         tag_like,

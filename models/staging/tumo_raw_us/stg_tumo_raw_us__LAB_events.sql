@@ -12,12 +12,17 @@ renamed as (
         lesson_id,
         username as user_id,
         workshop,
-        workshop_lvl,
+        case
+          when workshop_lvl = 1 then 'Level I'
+          when workshop_lvl = 2 then 'Level II'
+          when workshop_lvl = 3 then 'Level III'
+          end
+          as workshop_lvl,
         pass_status,
-        attendance,
-        star,
-        start_date,
-        end_date
+        --attendance,
+        --star,
+        start_date as lab_start_date,
+        end_date as lab_end_date
 
     from source
 
