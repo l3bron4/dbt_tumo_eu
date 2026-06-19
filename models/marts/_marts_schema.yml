@@ -1,0 +1,263 @@
+version: 2
+
+models:
+  # ==========================================
+  # DIMENSIONS
+  # ==========================================
+  - name: dim_af_list
+    description: "Reference table containing all self-training (Autoformation) activities and their baseline classifications."
+    columns:
+      - name: activity_name
+        description: "The unique identifier and name of the self-training activity."
+        tests:
+          - unique
+          - not_null
+      - name: activity_name_en_fr
+        description: "Bilingual English/French name or label mapping for the activity."
+      - name: skill
+        description: "The broad technical skill or competency track associated with this activity."
+      - name: workshop_lvl
+        description: "The difficulty tier of the activity (e.g., Orientation, Level I, Level II)."
+      - name: position
+        description: "The logical ordering sequence or rank of the activity within its learning path."
+      - name: bonus
+        description: "Boolean flag indicating if the activity is a bonus/optional exercise (True) or mandatory (False)."
+
+  - name: dim_date
+    description: "Standard calendar dimension table augmented with academic/school year indicators."
+    columns:
+      - name: date
+        description: "The primary key calendar date."
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: "The calendar year integer."
+      - name: school_year
+        description: "The academic year designation (e.g., '2023-2024') used for educational alignment."
+      - name: month
+        description: "The numeric calendar month (1 to 12)."
+      - name: day
+        description: "The day of the month integer (1 to 31)."
+      - name: week_number
+        description: "The standardized ISO week number of the year."
+
+  # ==========================================
+  # FACTS
+  # ==========================================
+  - name: fact_af_events
+    description: "Fact table recording all exercise submissions and evaluation attempts in the self-training workspace."
+    columns:
+      - name: act_id
+        description: "The unique identifier of the self-training attempt log."
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Foreign key referencing the unique student identity."
+      - name: workshop
+        description: "The main learning domain or ecosystem topic (e.g., Programming, 3D Modeling)."
+      - name: workshop_lvl
+        description: "The structural difficulty level of the lab context."
+      - name: activity_name
+        description: "The explicit title of the self-training exercise."
+      - name: activity_and_version
+        description: "Combined technical string tracking both activity title and its software release tag."
+      - name: bonus
+        description: "Boolean indicating if the logged attempt was on an optional bonus task."
+      - name: reject_count
+        description: "Cumulative counter of how many times this specific user had this activity rejected."
+      - name: try_status
+        description: "The evaluation outcome for this specific record (e.g., Awarded, Working, Rejected)."
+      - name: last_submission_date
+        description: "The historical timestamp string logging when the student submitted their code/project."
+      - name: last_examination_date
+        description: "The historical timestamp string logging when the trainer reviewed or corrected the work."
+      - name: software_version
+        description: "The specific product release tag active at runtime (e.g., 'v1', 'v2')."
+      - name: ab_test_group
+        description: "The explicit experimental variant assigned to the user during A/B windows (e.g., Variant_A, Variant_B, None)."
+      - name: is_pass
+        description: "Binary flag (1 for success/Awarded, 0 otherwise) used to easily compute success rates."
+
+  - name: fact_lab_events
+    description: "Fact table logging participation and completion milestones during guided group workshops (Labs)."
+    columns:
+      - name: lesson_id
+        description: "The primary identifier for a specific workshop lesson instance."
+      - name: user_id
+        description: "The student participant foreign key."
+      - name: workshop
+        description: "The core domain topic of the guided workshop."
+      - name: workshop_lvl
+        description: "The difficulty tier of the guided lab."
+      - name: pass_status
+        description: "The final completion or graduation outcome status for the student in this lab."
+      - name: lab_start_date
+        description: "The official calendar date when the workshop session began."
+      - name: lab_end_date
+        description: "The official calendar date when the workshop session concluded."
+
+  - name: fact_student_info
+    description: "Fact profile snapshot tracking enrollment lifecycle states, selections, and presence metrics per student."
+    columns:
+      - name: user_id
+        description: "The primary key representing a unique student."
+        tests:
+          - unique
+          - not_null
+      - name: location
+        description: "The physical training center where the student is registered (e.g., Lyon)."
+      - name: tumo_id
+        description: "The official corporate identity system integer number for the student."
+      - name: birth_date
+        description: "The student's date of birth."
+      - name: first_day_date
+        description: "The operational start date when the user first attended the center."
+      - name: path_date
+        description: "The calendar milestone date when the student committed to a specific learning pathway."
+      - name: churn_date
+        description: "The recorded date when the student officially left or canceled their subscription."
+      - name: present_ratio
+        description: "Percentage or ratio tracking historical attendance consistency."
+      - name: all_selection
+        description: "Aggregated string mapping all historical workshop choice sets made by the student."
+      - name: selection_1
+        description: "The primary priority domain selection chosen by the student."
+      - name: selection_2
+        description: "The secondary priority domain selection chosen by the student."
+      - name: selection_3
+        description: "The tertiary priority domain selection chosen by the student."
+      - name: is_closed
+        description: "Status flag indicating if the student's account profile is closed/inactive."
+
+  - name: fact_af_jira_tickets
+    description: "Fact table containing technical support requests and platform bugs registered during self-training."
+    columns:
+      - name: ticket_id
+        description: "The unique JIRA issue alphanumeric key (e.g., JIRA-XXXX)."
+        tests:
+          - unique
+          - not_null
+      - name: created_date
+        description: "The exact timestamp logging when the support ticket was opened in the system."
+      - name: location
+        description: "The city hub center where the student experienced the platform issue."
+      - name: activity_name
+        description: "The specific activity block the user was locked out of or working on when the error occurred."
+      - name: software_version
+        description: "The product software variant active on the student machine at log time."
+      - name: issue_type
+        description: "The classification category of the request (e.g., 'Bug', 'IT Support')."
+      - name: priority
+        description: "The assigned severity tier mapping urgency (e.g., 'Low', 'Medium', 'High')."
+      - name: description
+        description: "The raw text field logging student complaints or diagnostic logs."
+
+  - name: fact_center_daily_status
+    description: "Daily aggregated operational snapshots tracking registrations and active cohorts scoped by physical center location."
+    columns:
+      - name: date
+        description: "The operational log date snapshot."
+      - name: date_month
+        description: "Truncated date object representing the current month start for aggregation ease."
+      - name: nb_new_registred
+        description: "The total volume of completely new student intakes registered on this specific day."
+      - name: nb_subscribed
+        description: "The metric monitoring the total active subscription pool active on this date."
+      - name: nb_active
+        description: "The headcount of unique students physically or digitally active on assignments during this day."
+      - name: nb_closed
+        description: "The number of student profiles deactivated or closed on this specific calendar date."
+      - name: total_closed
+        description: "Running historical cumulative sum of closed accounts over time up to this date."
+      - name: location
+        description: "The physical center location tracking these metrics (e.g., Lyon)."
+      - name: year
+        description: "The calendar year integer extracted from the date."
+      - name: school_year
+        description: "The relative school/academic year cohort tag."
+      - name: month
+        description: "The numeric calendar month extracted from the date."
+
+  - name: fact_lab_satisfaction
+    description: "Granular survey feedback table recording end-of-lab scores alongside enriched semantic tags."
+    columns:
+      - name: satisfaction_id
+        description: "The unique survey submission primary key."
+        tests:
+          - unique
+          - not_null
+      - name: comment_timestamp
+        description: "The native BigQuery timestamp when the evaluation questionnaire was sent/saved."
+      - name: workshop_lvl
+        description: "The explicit level category of the evaluated workshop."
+      - name: workshop
+        description: "The domain name of the lab workshop evaluated."
+      - name: satisfaction_on_5
+        description: "The mandatory rating score left by the student from 1 to 5."
+      - name: tag_like
+        description: "Enriched semantic keyword highlighting what the student liked most (e.g., Trainer_Support)."
+      - name: tag_dislike
+        description: "Enriched semantic keyword highlighting critical friction points (e.g., Hardware_Software)."
+      - name: comments
+        description: "Cleaned and normalized raw free-text feedback left by the student."
+
+  # ==========================================
+  # GOLD LAYER (REPORTING READY)
+  # ==========================================
+  - name: gold_student_info_wide
+    description: "Wide master dashboard view consolidating timelines, workshop volumes, and retention cohorts for end-to-end student analysis."
+    columns:
+      - name: user_id
+        description: "The primary master student unique identifier."
+        tests:
+          - unique
+          - not_null
+      - name: location
+        description: "The registration center location for the student."
+      - name: tumo_id
+        description: "The official identity system number for the student."
+        tests:
+          - unique
+          - not_null
+      - name: birth_date
+        description: "The birthday of the student."
+      - name: first_day_date
+        description: "The calendar timestamp recording their initial entry day."
+      - name: path_date
+        description: "The day the student selected their definitive educational roadmap track."
+      - name: lab_1_start_date
+        description: "The timestamp recording exactly when this student attended their very first Lab workshop."
+      - name: churn_date
+        description: "The date of exit if the student canceled or dropped out."
+      - name: is_closed
+        description: "Profile lifecycle status string tracking active vs closed states."
+      - name: all_selection
+        description: "Historical map representation of choices made across learning pathways."
+      - name: nb_act
+        description: "The total volume count of distinct self-training exercises attempted by this user."
+      - name: nb_lab
+        description: "The total volume count of distinct guided workshops attended by this user."
+      - name: present_ratio
+        description: "The student presence consistency score."
+      - name: duree_parcours_month
+        description: "The total lifecycle duration of the student pathway computed in months."
+      - name: duree_parcours_day
+        description: "The total lifecycle duration of the student pathway computed in days."
+      - name: duree_orientation_day
+        description: "The delta time in days spent in the initial orientation phase before final track selection."
+      - name: retention_group
+        description: "Categorical cohort grouping classification used to build retention curves and analysis."
+
+  - name: gold_funnel_student
+    description: "Aggregated conversion table designed to build conversion rate funnel steps and assess operational speed inside BI dashboards."
+    columns:
+      - name: is_closed
+        description: "Filters and groups milestones by closed or active account statuses."
+      - name: nb
+        description: "The aggregated metric tracking headcount or volume reaching this specific funnel junction."
+      - name: duree
+        description: "The average duration or execution speed metric computed to transition into this funnel state."
+      - name: type
+        description: "The explicit label mapping the sequential steps of the learning funnel (e.g., Orientation, Registered, Lab Graduated)."

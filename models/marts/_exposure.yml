@@ -1,0 +1,16 @@
+exposures:
+  - name: TUMO_Reports
+    owner: 
+      name: Florent SOCRATE
+      email : florent.socrate@hotmail.fr
+    type: dashboard
+    url: https://datastudio.google.com/reporting/8b072cd1-e9f1-4d36-ab39-f5dd8ed9ec6e
+    description: "dashboard to have clear follow up of TUMO centers on student path (performance, waiting, retention) and product quality"
+    depends_on:
+      - ref('fact_af_events')
+      - ref('fact_af_jira_tickets')
+      - ref('fact_lab_events')
+      - ref('fact_lab_satisfaction')
+      - ref('fact_center_daily_status')
+      - ref('gold_funnel_student')
+      - ref('gold_student_info_wide')
