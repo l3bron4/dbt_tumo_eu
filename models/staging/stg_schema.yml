@@ -17,8 +17,8 @@ models:
         description: "The evaluation status of the self-training attempt."
         tests:
           - accepted_values:
-              arguments :
-                values: ['Awarded', 'Working', 'Rejected']
+              arguments:
+                values: ["Awarded", "Working", "Rejected"]
 
   - name: stg_tumo_raw_us__AF_jira_tickets
     description: "Staging table containing IT support and software bug tickets submitted from European centers. Granularity: one row per support ticket."
@@ -34,8 +34,8 @@ models:
         description: "The urgency level assigned to the ticket."
         tests:
           - accepted_values:
-              arguments :
-                values: ['Low', 'Medium', 'High']
+              arguments:
+                values: ["Low", "Medium", "High"]
 
   - name: stg_tumo_raw_us__AF_list
     description: "Staging reference table of available self-training activities and their baseline technical benchmarks."

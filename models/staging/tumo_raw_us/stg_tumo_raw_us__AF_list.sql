@@ -9,12 +9,12 @@ source as (
 renamed as (
 
     select
+        activity as activity_name,
+        activity_name_en_fr,
         skill,
         placement as workshop_lvl,
         position,
-        bonus,
-        activity as activity_name,
-        activity_name_en_fr
+        bonus
 
     from source
     where activity is not NULL

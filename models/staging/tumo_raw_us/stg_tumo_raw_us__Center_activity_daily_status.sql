@@ -9,7 +9,7 @@ source as (
 renamed as (
 
     select
-        date,
+        safe.parse_date('%b %e, %Y', date) as date,
         location,
         status,
         students_count

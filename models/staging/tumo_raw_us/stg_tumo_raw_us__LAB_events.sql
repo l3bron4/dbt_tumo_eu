@@ -25,6 +25,7 @@ renamed as (
         end_date as lab_end_date
 
     from source
+    where pass_status != 'null'
 
 )
 
