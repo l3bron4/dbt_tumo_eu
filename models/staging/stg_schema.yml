@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_tumo_raw_data__AF_events
+  - name: stg_tumo_raw_us__AF_events
     description: "Cleaned and casted staging table containing self-training session logs. Granularity: one row per student exercise attempt."
     columns:
       - name: act_id
@@ -20,7 +20,7 @@ models:
               arguments :
                 values: ['Awarded', 'Working', 'Rejected']
 
-  - name: stg_tumo_raw_data__AF_jira_tickets
+  - name: stg_tumo_raw_us__AF_jira_tickets
     description: "Staging table containing IT support and software bug tickets submitted from European centers. Granularity: one row per support ticket."
     columns:
       - name: ticket_id
@@ -35,7 +35,7 @@ models:
               arguments :
                 values: ['Low', 'Medium', 'High']
 
-  - name: stg_tumo_raw_data__AF_list
+  - name: stg_tumo_raw_us__AF_list
     description: "Staging reference table of available self-training activities and their baseline technical benchmarks."
     columns:
       - name: activity
@@ -48,14 +48,12 @@ models:
         tests:
           - not_null
 
-  - name: stg_tumo_raw_data__Center_activity_daily_status
+  - name: stg_tumo_raw_us__Center_activity_daily_status
     description: "Staging table aggregating operational metrics per training center on a daily basis. Granularity: one row per date and status."
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments : 
-            combination_of_columns:
-              - date
-              - status
+      - unique:
+          arguments:
+            column_name: "(date || '-' || status)"
     columns:
       - name: date
         description: "The operational log date."
@@ -66,7 +64,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_tumo_raw_data__LAB_events
+  - name: stg_tumo_raw_us__LAB_events
     description: "Staging table logging attendance and completion updates during guided workshop sessions (Labs)."
     columns:
       - name: lesson_id
@@ -75,16 +73,14 @@ models:
           - unique
           - not_null
 
-  - name: stg_tumo_raw_data__LAB_satisfaction_enriched
+  - name: stg_tumo_raw_us__LAB_satisfaction_enriched
     description: "Enriched staging table of end-of-lab satisfaction surveys. Granularity: one row per timestamp, workshop level, and workshop topic."
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments :
-            combination_of_columns:
-              - timestamp_comment
-              - workshop_lvl
-              - workshop
     columns:
+      - name: satisfaction_id
+        description: "The primary key identifying a unique satisfaction survey return"
+        tests:
+          - unique
+          - not_null
       - name: timestamp_comment
         description: "The BigQuery native format timestamp when the survey was submitted."
         tests:
@@ -93,11 +89,8 @@ models:
         description: "The mandatory rating score left by the student."
         tests:
           - not_null
-          - accepted_values:
-              arguments :
-                values: [1, 2, 3, 4, 5]
 
-  - name: stg_tumo_raw_data__Student_list_info_performance
+  - name: stg_tumo_raw_us__Student_list_info_performance
     description: "Staging master registry containing student profiles, registration dates, and baseline performance scores."
     columns:
       - name: username

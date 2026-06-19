@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('tumo_raw_data', 'AF_list') }}
+    select * from {{ source('tumo_raw_us', 'AF_list') }}
 
 ),
 
@@ -17,6 +17,7 @@ renamed as (
         activity_name_en_fr
 
     from source
+    where activity is not NULL
 
 )
 
