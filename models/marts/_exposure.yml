@@ -1,5 +1,5 @@
 exposures:
-  - name: TUMO Reports
+  - name: TUMO_Reports
     owner: 
       name: Florent SOCRATE
       email : florent.socrate@hotmail.fr
