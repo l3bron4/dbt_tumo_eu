@@ -1,9 +1,10 @@
 version: 2
 
 sources:
-  - name: tumo_raw_data
+
+  - name: tumo_raw_us
     description: "Raw data ingested from TUMO learning tracking platforms, product analytics tools, IT support, and student satisfaction surveys."
-    schema : tumo_raw_data
+    schema : tumo_raw_us
     tables:
       - name: AF_amplitude_tracking
         description: "Raw clickstream event data (Activity_Started, Activity_Submitted) extracted from Amplitude via Airbyte for self-training session tracking."

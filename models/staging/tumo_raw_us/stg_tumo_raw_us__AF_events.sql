@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('tumo_raw_data', 'AF_events') }}
+    select * from {{ source('tumo_raw_us', 'AF_events') }}
 
 ),
 
@@ -10,9 +10,9 @@ renamed as (
 
     select
         act_id,
-        username,
-        skill,
-        activity,
+        username as user_id,
+        skill as workshop,
+        activity as activity_name_en_fr,
         reject_count,
         try_status,
         last_submission_date,
@@ -21,7 +21,7 @@ renamed as (
         ab_test_group
 
     from source
-
+    where try_status in ('Awarded', 'Rejected')
 )
 
 select * from renamed

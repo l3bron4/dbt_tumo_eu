@@ -2,14 +2,14 @@ with
 
 source as (
 
-    select * from {{ source('tumo_raw_data', 'Center_activity_daily_status') }}
+    select * from {{ source('tumo_raw_us', 'Center_activity_daily_status') }}
 
 ),
 
 renamed as (
 
     select
-        date,
+        safe.parse_date('%b %e, %Y', date) as date,
         location,
         status,
         students_count
