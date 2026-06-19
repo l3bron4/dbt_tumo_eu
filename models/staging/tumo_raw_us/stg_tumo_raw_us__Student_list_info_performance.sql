@@ -9,27 +9,36 @@ source as (
 renamed as (
 
     select
-        username,
+        username as user_id,
         location,
         tumo_id,
-        registration_date,
-        attending_since,
-        continuous_absence,
-        present,
+        --birth_date_of,
+        safe.parse_date('%b %e, %Y', birth_date_of) as birth_date,
+        --registration_date,
+        --attending_since,
+        safe.parse_date('%b %e, %Y', attending_since) as first_day_date,
+        --path_date,
+        safe.parse_date('%b %e, %Y', path_date) as path_date,
+        --termination_date,
+        safe.parse_date('%b %e, %Y', termination_date) as churn_date,
+        --continuous_absence,
+        --present,
         present_ratio,
-        birth_date_of,
-        path_date,
-        termination_date,
-        regular_present,
-        awarded,
-        rejected,
-        completed,
-        incomplete,
-        withdrawn,
+        --regular_present,
+        --awarded,
+        --rejected,
+        --completed,
+        --incomplete,
+        --withdrawn,
         all_selection,
         selection_1,
         selection_2,
-        selection_3
+        selection_3,
+        case
+          when termination_date = 'null' then 'no'
+          else 'yes'
+          end
+          as is_closed
 
     from source
 

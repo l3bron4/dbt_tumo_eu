@@ -10,7 +10,7 @@ renamed as (
 
     select
         act_id,
-        username,
+        username as user_id,
         skill,
         activity,
         reject_count,

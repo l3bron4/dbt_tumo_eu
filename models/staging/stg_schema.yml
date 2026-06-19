@@ -9,7 +9,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: username
+      - name: user_id
         description: "Foreign key linking to the student registry."
         tests:
           - not_null
@@ -93,7 +93,7 @@ models:
   - name: stg_tumo_raw_us__Student_list_info_performance
     description: "Staging master registry containing student profiles, registration dates, and baseline performance scores."
     columns:
-      - name: username
+      - name: user_id
         description: "The primary key uniquely identifying a student within the ecosystem."
         tests:
           - unique

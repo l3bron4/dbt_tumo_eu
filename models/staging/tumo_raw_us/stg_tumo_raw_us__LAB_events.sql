@@ -10,7 +10,7 @@ renamed as (
 
     select
         lesson_id,
-        username,
+        username as user_id,
         workshop,
         workshop_lvl,
         pass_status,
